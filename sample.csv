@@ -1,0 +1,10 @@
+sample	condition	type
+WT1	ctrl	ctrl
+WT2	ctrl	ctrl
+WT3	ctrl	ctrl
+WT4	ctrl	ctrl
+KO1	treat	treat
+KO2	treat	treat
+KO3	treat	treat
+KO4	treat	treat
+		
