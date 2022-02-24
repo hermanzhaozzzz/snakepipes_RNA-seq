@@ -44,9 +44,9 @@ with os.popen("which sambamba") as path:
 DB_PATH = "/lustre1/chengqiyi_pkuhpc/zhaohn/1.database"
 
 # HG38
-GENOME = f"{DB_PATH}/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index/hg38_only_chromosome.fa"
-STAR_INDEX = f"{DB_PATH}/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index"
-ANNOTATION_GTF = f"{DB_PATH}/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index/201902-RefSeq_gene.from_UCSC.hg38.rm_XM_XR.sorted.gtf"
+# GENOME = f"{DB_PATH}/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index/hg38_only_chromosome.fa"
+# STAR_INDEX = f"{DB_PATH}/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index"
+# ANNOTATION_GTF = f"{DB_PATH}/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index/201902-RefSeq_gene.from_UCSC.hg38.rm_XM_XR.sorted.gtf"
 
 # 这里是小鼠的, 没改变量名
 # GENOME = f"{DB_PATH}/db_genomes/genome_fa/genome_gencode_GRCm38.p6/GRCm38.p6.genome.fa"
@@ -55,9 +55,9 @@ ANNOTATION_GTF = f"{DB_PATH}/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_h
 
 
 # 这里是拟南芥的, 没改变量名
-# GENOME = f"{DB_PATH}/db_genomes/genome_fa/genome_ensemblgenomes_tair10.28/genome.fa"
-# STAR_INDEX = f"{DB_PATH}/db_genomes/genome_fa/genome_ensemblgenomes_tair10.28/star_index_50bp"
-# ANNOTATION_GTF = f"{DB_PATH}/db_genomes/genome_annotation/genome_ensemblgenomes_tair10.28/Arabidopsis_thaliana.TAIR10.28.gtf"
+GENOME = f"{DB_PATH}/db_genomes/genome_fa/genome_ensemblgenomes_tair10.28/genome.fa"
+STAR_INDEX = f"{DB_PATH}/db_genomes/genome_fa/genome_ensemblgenomes_tair10.28/star_index_50bp"
+ANNOTATION_GTF = f"{DB_PATH}/db_genomes/genome_annotation/genome_ensemblgenomes_tair10.28/Arabidopsis_thaliana.TAIR10.28.gtf"
 
 THREADS = '20'
 
@@ -65,15 +65,10 @@ THREADS = '20'
 # vars
 # --------------------------------------------------------------->>>>>>>
 SAMPLES = [
-    'KD_CCNB1-rep1',
-    'KD_CCNB1-rep2',
-    'KD_CCNB1-rep3',
-    'KD_NC-rep1',
-    'KD_NC-rep2',
-    'KD_NC-rep3',
-    'KD_PUS7-rep1',
-    'KD_PUS7-rep2',
-    'KD_PUS7-rep3'
+    'Col0-1',
+    'Col0-2',
+    'sgs3-1',
+    'sgs3-2'
 ]
 
 
@@ -101,10 +96,10 @@ rule TruSeq_cutadapt:
     shell:# using illumina universal adaptor
         """
         {CUTADAPT} -j {THREADS} --times 1  -e 0.1  -O 3  --quality-cutoff 25 \
-        -m 55 -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC \
-        -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT \
-        -o {output[0]} -p {output} {input} > {log} 2>&1
+        -m 30 -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC \
+        -o {output} {input} > {log} 2>&1
         """
+        # -m指定最小长度
 # rule NexteraSeq_cutadapt:
 #     input:
         # "../fastq/{sample}_R1.fastq.gz",
@@ -119,6 +114,9 @@ rule TruSeq_cutadapt:
 #         -A GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG \
 #         -o {output[0]} -p {output} {input} > {log} 2>&1
 #         """
+        # -m指定最小长度
+
+
 # ------------------------------------------------------------------------------------------>>>>>>>>>>
 # STAR mapping
 # ------------------------------------------------------------------------------------------>>>>>>>>>>

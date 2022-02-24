@@ -2,9 +2,6 @@ sample	condition	type
 NC1	NC	ctrl
 NC2	NC	ctrl
 NC3	NC	ctrl
-CCNB11	CCNB1	treat
-CCNB12	CCNB1	treat
-CCNB13	CCNB1	treat
 PUS71	PUS7	treat
 PUS72	PUS7	treat
 PUS73	PUS7	treat

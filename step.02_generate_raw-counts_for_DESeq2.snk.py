@@ -12,7 +12,7 @@ DB_PATH = "/lustre1/chengqiyi_pkuhpc/zhaohn/1.database"
 # HG38
 GENOME = f"{DB_PATH}/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index/hg38_only_chromosome.fa"
 STAR_INDEX = f"{DB_PATH}/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index"
-ANNOTATION_GTF = f"{DB_PATH}/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index/201902-RefSeq_gene.from_UCSC.hg38.rm_XM_XR.sorted.gtf"
+ANNOTATION_GTF = f"{DB_PATH}/db_genomes/genome_annotation/genome_ucsc_hg38/ucsc_hg38_genes-and-gene-predictions_NCBI-refseq_refFlat.gtf"
 
 # 这里是小鼠的, 没改变量名
 # GENOME = f"{DB_PATH}/db_genomes/genome_fa/genome_gencode_GRCm38.p6/GRCm38.p6.genome.fa"

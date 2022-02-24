@@ -11,7 +11,8 @@ job.srp*
 .DS_Store
 .Rhistory
 .localized
-slurm-*.out∑/public/
+slurm-*.out
+/public/
 /.ipynb_checkpoints/
 /.deploy_git/
 /.texpadtmp/
@@ -25,3 +26,4 @@ job.srp*
 .Rhistory
 .localized
 slurm-*.out
+plots/.ipynb_checkpoints/
