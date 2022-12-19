@@ -1,7 +1,11 @@
-sample	condition	type
-NC1	NC	ctrl
-NC2	NC	ctrl
-NC3	NC	ctrl
-PUS71	PUS7	treat
-PUS72	PUS7	treat
-PUS73	PUS7	treat
+sample,condition,type
+LI-rep1,LI,treat
+LI-rep2,LI,treat
+mLN-rep1,mLN,treat
+mLN-rep2,mLN,treat
+pLN-rep1,pLN,treat
+pLN-rep2,pLN,treat
+SI-rep1,SI,treat
+SI-rep2,SI,treat
+spleen-rep1,spleen,treat
+spleen-rep2,spleen,treat

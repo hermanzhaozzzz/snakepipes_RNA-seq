@@ -10,14 +10,15 @@ with os.popen("which featureCounts") as path:
 DB_PATH = "/lustre1/chengqiyi_pkuhpc/zhaohn/1.database"
 
 # HG38
-GENOME = f"{DB_PATH}/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index/hg38_only_chromosome.fa"
-STAR_INDEX = f"{DB_PATH}/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index"
-ANNOTATION_GTF = f"{DB_PATH}/db_genomes/genome_annotation/genome_ucsc_hg38/ucsc_hg38_genes-and-gene-predictions_NCBI-refseq_refFlat.gtf"
+# GENOME = f"{DB_PATH}/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index/hg38_only_chromosome.fa"
+# STAR_INDEX = f"{DB_PATH}/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index"
+# ANNOTATION_GTF = f"{DB_PATH}/db_genomes/genome_annotation/genome_ucsc_hg38/ucsc_hg38_genes-and-gene-predictions_NCBI-refseq_refFlat.gtf"
 
 # 这里是小鼠的, 没改变量名
-# GENOME = f"{DB_PATH}/db_genomes/genome_fa/genome_gencode_GRCm38.p6/GRCm38.p6.genome.fa"
-# STAR_INDEX = f"{DB_PATH}/db_genomes/genome_fa/genome_gencode_GRCm38.p6/star_index_150bp"
+GENOME = f"{DB_PATH}/db_genomes/genome_fa/genome_gencode_GRCm38.p6/GRCm38.p6.genome.fa"
+STAR_INDEX = f"{DB_PATH}/db_genomes/genome_fa/genome_gencode_GRCm38.p6/star_index_150bp"
 # ANNOTATION_GTF = f"{DB_PATH}/db_genomes/genome_annotation/genome_gencode_GRCm38.p6/gencode.vM25.annotation.gtf"
+ANNOTATION_GTF = f"{DB_PATH}/db_genomes/genome_annotation/genome_gencode_GRCm38.p6/ucsc_mm10_genes-and-gene-predictions_NCBI-refseq_refFlat.gtf"
 
 
 # 这里是拟南芥的, 没改变量名
@@ -36,21 +37,33 @@ THREADS = '20'
 # vars
 # --------------------------------------------------------------->>>>>>>
 SAMPLES = [
-    'KD_NC-rep1',
-    'KD_NC-rep2',
-    'KD_NC-rep3',
-    'KD_CCNB1-rep1',
-    'KD_CCNB1-rep2',
-    'KD_CCNB1-rep3',
-    'KD_PUS7-rep1',
-    'KD_PUS7-rep2',
-    'KD_PUS7-rep3'
+    'LI-rep1',
+    'LI-rep2',
+    'mLN-rep1',
+    'mLN-rep2',
+    'pLN-rep1',
+    'pLN-rep2',
+    'SI-rep1',
+    'SI-rep2',
+    'spleen-rep1',
+    'spleen-rep2',
 ]
+
 
 
 
 # ------------------------------------------------------------------------------------------>>>>>>>>>>
 # rule all
+# https://www.jianshu.com/p/9cc4e8657d62
+# -T 使用的线程数
+# -p 如果是paird end 就用, 只能用在paired-end的情况中，会统计fragment而不统计read
+# -B 在-p选择的条件下，只有两端read都比对上的fragment才会被统计
+# -t 将exon作为一个feature
+# -g 将gene_id作为一个feature
+# -a 参考的gtf/gff
+# -o 输出文件
+# 最后加上bam文件，有几个就加几个
+
 # ------------------------------------------------------------------------------------------>>>>>>>>>>
 rule all:
     input:
@@ -74,11 +87,3 @@ rule featureCounts:
         -o {output} \
         {params.BAM} 2>{log}
         """
-
-# -T 使用的线程数
-# -p 如果是paird end 就用
-# -t 将exon作为一个feature
-# -g 将gene_id作为一个feature
-# -a 参考的gtf/gff
-# -o 输出文件
-# 最后加上bam文件，有几个就加几个

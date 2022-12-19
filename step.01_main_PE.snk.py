@@ -44,14 +44,15 @@ with os.popen("which sambamba") as path:
 DB_PATH = "/lustre1/chengqiyi_pkuhpc/zhaohn/1.database"
 
 # HG38
-GENOME = f"{DB_PATH}/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index/hg38_only_chromosome.fa"
-STAR_INDEX = f"{DB_PATH}/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index"
-ANNOTATION_GTF = f"{DB_PATH}/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index/201902-RefSeq_gene.from_UCSC.hg38.rm_XM_XR.sorted.gtf"
+# GENOME = f"{DB_PATH}/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index/hg38_only_chromosome.fa"
+# STAR_INDEX = f"{DB_PATH}/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index"
+# ANNOTATION_GTF = f"{DB_PATH}/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index/201902-RefSeq_gene.from_UCSC.hg38.rm_XM_XR.sorted.gtf"
 
 # 这里是小鼠的, 没改变量名
-# GENOME = f"{DB_PATH}/db_genomes/genome_fa/genome_gencode_GRCm38.p6/GRCm38.p6.genome.fa"
-# STAR_INDEX = f"{DB_PATH}/db_genomes/genome_fa/genome_gencode_GRCm38.p6/star_index_150bp"
-# ANNOTATION_GTF = f"{DB_PATH}/db_genomes/genome_annotation/genome_gencode_GRCm38.p6/gencode.vM25.annotation.gtf"
+GENOME = f"{DB_PATH}/db_genomes/genome_fa/genome_gencode_GRCm38.p6/GRCm38.p6.genome.fa"
+STAR_INDEX = f"{DB_PATH}/db_genomes/genome_fa/genome_gencode_GRCm38.p6/star_index_150bp"
+ANNOTATION_GTF = f"{DB_PATH}/db_genomes/genome_annotation/genome_gencode_GRCm38.p6/gencode.vM25.annotation.gtf"
+
 
 
 # 这里是拟南芥的, 没改变量名
@@ -65,15 +66,16 @@ THREADS = '20'
 # vars
 # --------------------------------------------------------------->>>>>>>
 SAMPLES = [
-    'KD_CCNB1-rep1',
-    'KD_CCNB1-rep2',
-    'KD_CCNB1-rep3',
-    'KD_NC-rep1',
-    'KD_NC-rep2',
-    'KD_NC-rep3',
-    'KD_PUS7-rep1',
-    'KD_PUS7-rep2',
-    'KD_PUS7-rep3'
+    'LI-rep1',
+    'LI-rep2',
+    'mLN-rep1',
+    'mLN-rep2',
+    'pLN-rep1',
+    'pLN-rep2',
+    'SI-rep1',
+    'SI-rep2',
+    'spleen-rep1',
+    'spleen-rep2',
 ]
 
 
@@ -82,11 +84,6 @@ SAMPLES = [
 # ------------------------------------------------------------------------------------------>>>>>>>>>>
 rule all:
     input:
-        expand("../fix.fastq/{sample}_R1_cutadapt.fastq.gz",sample=SAMPLES),
-        expand("../fix.fastq/{sample}_R2_cutadapt.fastq.gz",sample=SAMPLES),
-        expand("../bam/{sample}_Aligned.out.bam",sample=SAMPLES),
-        expand("../bam/{sample}_Aligned.out.fix_RG.bam",sample=SAMPLES),
-        expand("../bam/{sample}_Aligned_sort.bam",sample=SAMPLES),
         expand("../bam/{sample}_Aligned_sort_rmdup.bam",sample=SAMPLES),
         expand("../bam/{sample}_Aligned_sort_rmdup.bam.bai",sample=SAMPLES),
 # ------------------------------------------------------------------------------------------>>>>>>>>>>
@@ -97,8 +94,8 @@ rule TruSeq_cutadapt:
         "../fastq/{sample}_R1.fastq.gz",
         "../fastq/{sample}_R2.fastq.gz"
     output:
-        "../fix.fastq/{sample}_R1_cutadapt.fastq.gz",
-        "../fix.fastq/{sample}_R2_cutadapt.fastq.gz"
+        temp("../fix.fastq/{sample}_R1_cutadapt.fastq.gz"),
+        temp("../fix.fastq/{sample}_R2_cutadapt.fastq.gz")
     log:
         "../fix.fastq/{sample}_cutadapt.log"
     shell:# using illumina universal adaptor
@@ -132,7 +129,7 @@ rule STAR_mapping:
         fq1 = "../fix.fastq/{sample}_R1_cutadapt.fastq.gz",
         fq2 = "../fix.fastq/{sample}_R2_cutadapt.fastq.gz"
     output:
-        "../bam/{sample}_Aligned.out.bam"
+        temp("../bam/{sample}_Aligned.out.bam")
     log:
         "../bam/{sample}_Aligned.out.log"
     params:
@@ -156,19 +153,27 @@ rule add_RG_tag:
     input:
         "../bam/{sample}_Aligned.out.bam"
     output:
-        "../bam/{sample}_Aligned.out.fix_RG.bam"
+        temp("../bam/{sample}_Aligned.out.fix_RG.bam")
     params:
         tag = "'@RG\\tID:{sample}\\tSM:{sample}\\tPL:ILLUMINA'"
     shell:
         """
         {SAMTOOLS} addreplacerg -r {params.tag} -@ {THREADS} -O BAM -o {output} --reference {GENOME} {input}
         """
+rule filter_bam:
+    input:
+        "../bam/{sample}_Aligned.out.fix_RG.bam"
+    output:
+        temp("../bam/{sample}_Aligned.out.fix_RG_filter.bam")
+    shell:
+        """{SAMTOOLS} view -@ {THREADS} -F 4 -F 8 -hb {input} -o {output}"""
+# 12
 # ------------------------------------------------------------------------------------------>>>>>>>>>>
 # samtools sort by position(not sort by name)
 # ------------------------------------------------------------------------------------------>>>>>>>>>>
 rule BAM_sort_by_position:
     input:
-        "../bam/{sample}_Aligned.out.fix_RG.bam"
+        "../bam/{sample}_Aligned.out.fix_RG_filter.bam"
     output:
         "../bam/{sample}_Aligned_sort.bam"
     shell:
@@ -201,3 +206,4 @@ rule sambamba_rmdup_and_build_index:
                 --sort-buffer-size 8192 \
                 {input} {output[0]} > {log} 2>&1
         """
+        
