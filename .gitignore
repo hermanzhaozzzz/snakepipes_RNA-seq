@@ -1,29 +1,40 @@
+# this project
+*.csv
+*.json
+
+
+##############
+# common project
+##############
+# python cache
+**/__pycache__/
+# spyder
+**/.spyproject/
+# jupyterlab meta
+**/.ipynb_checkpoints/
+# pycharm meta
+**/.idea/
+# vscode
+**/.vscode/
+# Rstudio history
+**/.Rhistory
+# macos meta
+**/.DS_Store
+**/.Trash/
+
+# snakemake configure
+**/.snakemake/
+samples.json
+# HEXO public
 /public/
-/.ipynb_checkpoints/
 /.deploy_git/
+# TexPad temp
 /.texpadtmp/
-/.Trash/
-/.snakemake/
-/tmpdir_*/
+# Polaris slurm system
 sna*.err
 sna*.out
 job.srp*
-.DS_Store
-.Rhistory
-.localized
 slurm-*.out
-/public/
-/.ipynb_checkpoints/
-/.deploy_git/
-/.texpadtmp/
-/.Trash/
-/.snakemake/
+# Others
 /tmpdir_*/
-sna*.err
-sna*.out
-job.srp*
-.DS_Store
-.Rhistory
 .localized
-slurm-*.out
-plots/.ipynb_checkpoints/
