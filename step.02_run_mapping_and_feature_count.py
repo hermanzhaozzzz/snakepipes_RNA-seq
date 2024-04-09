@@ -60,8 +60,10 @@ print(READ)
 # DATABASE INFO
 # ------------------------------------------------------------------->>>>>>>>>>
 GENOME = dt["genome"]
-STAR_INDEX = "star_index"
-ANNOTATION_GTF = "annotation_gtf"
+THREADS = dt["thread"]
+STAR_INDEX = dt["star_index"]
+ANNOTATION_GTF = dt["annotation_gtf"]
+
 # ------------------------------------------------------------------->>>>>>>>>>
 # SOFTWARE INFO
 # ------------------------------------------------------------------->>>>>>>>>>
@@ -76,6 +78,7 @@ FASTP = "fastp"
 SAMTOOLS = "samtools"
 STAR = "STAR"
 SAMBAMBA = "sambamba"
+FEATURECOUNTS = "featureCounts"
 
 # ------------------------------------------------------------------------------------------>>>>>>>>>>
 # rule all
@@ -194,6 +197,7 @@ rule sambamba_rmdup_and_build_index:
 # ------------------------------------------------------------------------------------------>>>>>>>>>>
 # featureCounts
 # ------------------------------------------------------------------------------------------>>>>>>>>>>
+# https://www.jianshu.com/p/e20a3b73dcd0
 # https://www.jianshu.com/p/9cc4e8657d62
 # -T 使用的线程数
 # -p 如果是paird end 就用, 只能用在paired-end的情况中，会统计fragment而不统计read
@@ -205,7 +209,8 @@ rule sambamba_rmdup_and_build_index:
 # 最后加上bam文件，有几个就加几个
 rule featureCounts:
     input:
-        expand("../bam/{sample}_Aligned_sort_rmdup.bam",sample=SAMPLES)
+        # expand("../bam/{sample}_Aligned_sort_rmdup.bam",sample=SAMPLES)
+        expand("../bam/{sample}_Aligned.out.bam",sample=SAMPLES)
     output:
         '../featureCounts/all_feature.txt'
     log:
