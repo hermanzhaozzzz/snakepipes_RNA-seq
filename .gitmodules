@@ -1,0 +1,6 @@
+[submodule "__dont_move/jupyter_call-RNA-CBE-off-target"]
+	path = __dont_move/jupyter_call-RNA-CBE-off-target
+	url = git@github.com:hermanzhaozzzz/jupyter_call-RNA-CBE-off-target.git
+[submodule "__dont_move/snakepipes_rna-seq-gatk-variant-calling.git"]
+	path = __dont_move/snakepipes_rna-seq-gatk-variant-calling.git
+	url = git@github.com:hermanzhaozzzz/snakepipes_rna-seq-gatk-variant-calling.git
