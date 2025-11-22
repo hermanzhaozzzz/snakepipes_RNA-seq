@@ -1,0 +1,48 @@
+# ------------------------------------------------------------------->>>>>>>>>>
+# 勿动下列信息
+# ------------------------------------------------------------------->>>>>>>>>>
+# 人 HG38
+genome: "/lustre3/chengqiyi_pkuhpc/folder_for_learning/zhaohn/1.database/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index/hg38_only_chromosome.fa"
+star_index: "/lustre3/chengqiyi_pkuhpc/folder_for_learning/zhaohn/1.database/db_genomes/genome_fa/genome_ucsc_hg38/genome_ucsc_hg38.fa.star_index"
+annotation_gtf: "/lustre3/chengqiyi_pkuhpc/folder_for_learning/zhaohn/1.database/db_genomes/genome_annotation/genome_ucsc_hg38/201902-RefSeq_gene.from_UCSC.hg38.rm_XM_XR.sorted.gtf"
+
+# 小鼠（如需切换，请把上面三项换成这里对应路径）
+# genome: "${HOME}/1.database/db_genomes/genome_fa/genome_gencode_GRCm38.p6/GRCm38.p6.genome.fa"
+# star_index: "${HOME}/1.database/db_genomes/genome_fa/genome_gencode_GRCm38.p6/star_index_150bp"
+# annotation_gtf: "${HOME}/1.database/db_genomes/genome_annotation/genome_gencode_GRCm38.p6/gencode.vM25.annotation.gtf"
+
+# 拟南芥
+# genome: "${HOME}/1.database/db_genomes/genome_fa/genome_ensemblgenomes_tair10.28/genome.fa"
+# star_index: "${HOME}/1.database/db_genomes/genome_fa/genome_ensemblgenomes_tair10.28/star_index_50bp"
+# annotation_gtf: "${HOME}/1.database/db_genomes/genome_annotation/genome_ensemblgenomes_tair10.28/Arabidopsis_thaliana.TAIR10.28.gtf"
+# ------------------------------------------------------------------->>>>>>>>>>
+input_dir: "../fastq"
+output_base: "../results_RNA-seq"
+count_use_rmdup: false   # bulk RNA-seq 建议 false
+featurecounts_strand: 0  # 可选：featureCounts 链特异性（0/1/2）；若不知道就用 0
+# ------------------------------------------------------------------->>>>>>>>>>
+# 是否跑 mpileup → 突变频率解析
+# ------------------------------------------------------------------->>>>>>>>>>
+mpileup:
+  enable: true           # false 则整个 mpileup 流程不执行
+  use_rmdup: true        # true: 用去重 BAM（推荐做 mutation 频率）
+  max_depth: 1000000     # samtools mpileup --max-depth
+  min_mapq: 20           # -q
+  min_bq: 20             # -Q
+  mut_threshold: 0       # bioat mpileup2table --mutation_number_threshold
+
+# ------------------------------------------------------------------->>>>>>>>>>
+# 更新下列信息即可
+# ------------------------------------------------------------------->>>>>>>>>>
+threads: 20   # 对应 Snakefile 里的 config["threads"]
+
+treatments:
+  - AIM_A_Max_IDR_rep1
+  - AIM_A_Max_rep1
+  - CP26_AIM_A_Max_IDR_rep1
+  - CP26_AIM_A_Max_rep1
+
+controls:
+  - Control_rep1
+  - Control_rep2
+  

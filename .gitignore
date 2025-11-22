@@ -1,8 +1,7 @@
+##############
 # this project
-*.csv
-*.json
-
-
+##############
+*.tsv.gz
 ##############
 # common project
 ##############
@@ -38,3 +37,4 @@ slurm-*.out
 # Others
 /tmpdir_*/
 .localized
+
